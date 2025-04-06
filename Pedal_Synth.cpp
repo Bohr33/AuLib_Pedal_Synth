@@ -145,14 +145,18 @@ int main(int argc, char** argv)
     int del_CC = 27;
     //Pre-set ADSR values
     std::array<double, 4> ADSR_vals = {0.05, .3, .5, 1};
+    
+    double delay_amt;
+    const double delay_fdbk = 0.7;
+    const double delay_time = 1.;
 
     Instrument<SineSynth, std::array<int, 5>, std::array<double, 4>> Synth(8, 0, MIDI_vals, ADSR_vals);
     Instrument<TriSynth, std::array<int, 5>, std::array<double, 4>> TriSynth(8, 0, MIDI_vals, ADSR_vals);
     SigBus mix;
-    Delay del(1, .4);
+    Delay del(delay_time, delay_fdbk);
     AudioBase Buffer;
 
-    double delay_amt;
+    
 
     int MIDI_tag;
     std::vector<std::string> MIDI_List;
@@ -186,7 +190,8 @@ int main(int argc, char** argv)
                 mix.clear();
             }
             midi.close();
-    }
+    }else   
+        std::cout << "Error Opening MIDI Device\nClosing Program..." << std::endl;
 
     return 1;
 }
